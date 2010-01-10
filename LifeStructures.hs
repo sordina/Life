@@ -34,17 +34,17 @@ mkCell matrix (x, y) (mx, my) = LifeCell {
     neighbours = do
       y' <- [x - 1 .. x + 1]
       x' <- [y - 1 .. y + 1]
-      return $ mkMaybe $ mkCell matrix (x', y') (mx, my)
+      return $ mkMaybe x' y'
   }
   where
-    n = const Nothing
-    mkMaybe :: LifeCell a -> Maybe (LifeCell a)
-    mkMaybe
-      | x <= 0 = n
-      | y <= 0 = n
-      | x >= mx = n
-      | y >= my = n
-      | otherwise = Just
+    n = Nothing
+    mkMaybe x' y'
+      | x <= 0             = n
+      | y <= 0             = n
+      | x >= mx            = n
+      | y >= my            = n
+      | x' == x && y' == y = n -- The self cell isn't a neighbour
+      | otherwise          = Just $ mkCell matrix (x', y') (mx, my)
 
 fromNestedRaw :: [[a]] -> LifeSnapshot a
 fromNestedRaw cells = fromNestedInner (fromIntegral $ length $ head cells) cells

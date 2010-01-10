@@ -1,7 +1,6 @@
 module ListUtils where
 
 import Data.List (groupBy)
-import Control.Arrow ((&&&))
 
 splitLen :: Integer -> [a] -> [[a]]
 splitLen width starting = s starting []
@@ -9,7 +8,7 @@ splitLen width starting = s starting []
     w = fromIntegral width
     s :: [a] -> [[a]] -> [[a]]
     s [] done = done
-    s todo done = start : (s rest done)
+    s todo done = start : s rest done
       where
         (start, rest) = splitAt w todo
 

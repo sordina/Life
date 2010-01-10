@@ -61,7 +61,7 @@ fromNestedInner width cells = LifeSnapshot {
     sCell = mkCell cells (0, 0) (mx, my)
 
 fromFlat :: Integer -> [a] -> LifeSnapshot a
-fromFlat width = fromNestedInner width . (splitLen width)
+fromFlat width = fromNestedInner width . splitLen width
 
 -- Destructors
 
@@ -83,7 +83,7 @@ toFlatWithPositions list = l'''
     l = toNestedRaw list
     l' = map (zip n) l
     l'' = zip n l'
-    l''' = concat $ map (\(y, l) -> f y l) l''
+    l''' = concatMap (uncurry f) l''
     f y = map (\(x,i) -> (x, y, i))
     n = [0..]
 

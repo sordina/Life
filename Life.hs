@@ -31,7 +31,7 @@ createSnapshot :: IO HealthSnapshot
 createSnapshot = liftM mkSnapshot $ mkNestedBools 100
   where
     mkBools n = sequence $ replicateM n getStdRandom (randomR (False,True))
-    mkNestedBools n = sequence $ replicate n (mkBools n)
+    mkNestedBools n = replicateM n (mkBools n)
 
 window title width height display = do
   createWindow title

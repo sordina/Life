@@ -7,68 +7,30 @@
     Any dead cell with exactly three live neighbours becomes a live cell.
 --}
 
+-- External imports
+
 import Graphics.UI.GLUT
 import Data.IORef
 import Random
 import Control.Monad
 
--- import Matrix
+-- Internal imports
 
-type Health = Bool
-
-nextState :: Health -> Integer -> Health
-
-nextState True neighbours
-  | neighbours < 2 = False
-  | neighbours > 3 = False
-  | otherwise      = True
-
-nextState False neighbours
-  | neighbours == 3 = True
-  | otherwise       = False
+import LifeBool
+import LifeRendering
 
 main = do
   (progname, _) <- getArgsAndInitialize
   initialSnapshopt <- createSnapshot
-  lifeList <- newIORef $ iterate lifeTransformer initialSnapshopt
+  lifeList <- newIORef $ iterate nextSnapshot initialSnapshopt
   window "LIFE" 100 100 (display lifeList)
   mainLoop
 
-createSnapshot :: IO LifeSnapshot
-createSnapshot = liftM mkLifeSnapshot $ mkNestedBools 100
+createSnapshot :: IO HealthSnapshot
+createSnapshot = liftM mkSnapshot $ mkNestedBools 100
   where
     mkBools n = sequence $ replicateM n getStdRandom (randomR (False,True))
     mkNestedBools n = sequence $ replicate n (mkBools n)
-
-lifeTransformer :: LifeSnapshot -> LifeSnapshot
-lifeTransformer = fmap succeed 
-
-data LifeSnapshot = LifeSnapshot {
-    cells::[[Bool]],
-    width::Integer,
-    height::Integer
-  }
-
-mkLifeSnapshot cells = LifeSnapshot {
-    cells = cells,
-    width = len (head cells),
-    height = len cells
-  }
-
-succeed :: LifeCell -> LifeCell
-succeed = undefined
-
-parity :: LifeSnapshot -> Integer -> Integer -> Bool
-parity life x y = deduce $ neighbours life x y
-  where
-    deduce = even . length . (filter id)
-
-neighbours :: LifeSnapshot -> Integer -> Integer -> [Bool]
-neighbours life x y = undefined
-
-{- Utility functions -}
-
-len = fromIntegral . length
 
 window title width height display = do
   createWindow title
@@ -76,13 +38,10 @@ window title width height display = do
   displayCallback $= display
 
 -- Pops off the head of the life-list and renders it.
-display :: IORef [LifeSnapshot] -> IO ()
+display :: IORef [HealthSnapshot] -> IO ()
 display lifeList = do
   clear [ColorBuffer]
   snap:snaps <- readIORef lifeList
   writeIORef lifeList snaps
   renderSnapshot snap
   flush
-
-renderSnapshot :: LifeSnapshot -> IO ()
-renderSnapshot = undefined

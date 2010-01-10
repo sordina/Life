@@ -9,12 +9,12 @@ data LifeSnapshot a = LifeSnapshot {
     startCell :: LifeCell a,
     nested :: [[LifeCell a]],
     nestedRaw :: [[a]]
-  }
+  } deriving (Show, Eq)
 
 data LifeCell a = LifeCell {
     state :: a,
     neighbours :: [Maybe (LifeCell a)]
-  }
+  } deriving (Show, Eq)
 
 -- Instances
 

@@ -6,7 +6,7 @@ import Control.Monad (mapM_)
 import LifeBool
 import Colors
 import ListUtils
-import LifeStructures (toNestedRaw)
+import LifeStructures (toNestedRaw, state)
 
 type Point = (Integer, Integer)
 
@@ -17,20 +17,17 @@ renderSnapshot snapshot = renderInner points
     width = (length $ head nestedRaw) - 1
     height = (length nestedRaw) - 1
     points = [(fromIntegral x, fromIntegral y) | x <- [0..width], y <- [0..height]]
+    health = map (\(x, y) -> nestedAt x y nestedRaw) points
+    pointsHealth = zip points health
 
     renderInner :: [Point] -> IO ()
     renderInner points = do
-      clear [ColorBuffer]
       color white
+      renderPrimitive Quads $ mapM_ renderPoint pointsHealth
 
-      renderPrimitive Quads $ do
-        mapM_ renderPoint points
-
-      flush
-
-renderPoint :: Point -> IO ()
-renderPoint (x, y) = do
-  point x y
+renderPoint :: (Point, Health) -> IO ()
+renderPoint ((x, y), True) = point x y
+renderPoint _ = return ()
 
 point :: Integer -> Integer -> IO ()
 point x y = do

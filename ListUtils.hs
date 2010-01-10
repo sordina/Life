@@ -1,7 +1,5 @@
 module ListUtils where
 
-import Data.List (groupBy)
-
 splitLen :: Integer -> [a] -> [[a]]
 splitLen width starting = s starting []
   where

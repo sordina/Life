@@ -19,8 +19,9 @@ import Control.Monad
 import LifeBool
 import LifeRendering
 
+main :: IO ()
 main = do
-  (progname, _) <- getArgsAndInitialize
+  _ <- getArgsAndInitialize
   initialSnapshopt <- createSnapshot
   lifeList <- newIORef $ iterate nextSnapshot initialSnapshopt
   window "LIFE" 100 100 (display lifeList)

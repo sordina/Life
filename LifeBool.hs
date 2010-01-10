@@ -32,3 +32,12 @@ nextState True neighbours
 nextState False neighbours
   | neighbours == 3 = True
   | otherwise       = False
+
+-- Module properties
+
+-- A somewhat pointless property as it just sets, then gets.
+prop_mkSnapshot :: [[Health]] -> Bool
+prop_mkSnapshot health = destructed == health
+  where
+    constructed = mkSnapshot health
+    destructed = toNestedRaw constructed

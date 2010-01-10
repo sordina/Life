@@ -77,6 +77,16 @@ toFlat = concat . toNested
 toFlatRaw :: LifeSnapshot a -> [a]
 toFlatRaw = concat . toNestedRaw
 
+toFlatWithPositions :: LifeSnapshot a -> [(Integer, Integer, a)]
+toFlatWithPositions list = l'''
+  where
+    l = toNestedRaw list
+    l' = map (zip n) l
+    l'' = zip n l'
+    l''' = concat $ map (\(y, l) -> f y l) l''
+    f y = map (\(x,i) -> (x, y, i))
+    n = [0..]
+
 -- Direction functions
 
 direction :: Integer -> LifeCell a -> Maybe (LifeCell a)

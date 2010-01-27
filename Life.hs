@@ -18,14 +18,21 @@ import Control.Monad
 
 import LifeBool
 import LifeRendering
+import LifeStructures
 
 main :: IO ()
 main = do
-  _ <- getArgsAndInitialize
-  initialSnapshopt <- createSnapshot
-  lifeList <- newIORef $ iterate nextSnapshot initialSnapshopt
-  window "LIFE" 100 100 (display lifeList)
-  mainLoop
+  -- _ <- getArgsAndInitialize
+  lifeList <- liftM (iterate nextSnapshot) createSnapshot
+  lifeListIO <- newIORef lifeList
+  showLifeList lifeList
+  -- window "LIFE" 100 100 (display lifeList)
+  -- mainLoop
+
+showLifeList list = mapM_ putStrLn lines
+  where
+    lines = take 20 flatSnaps
+    flatSnaps = map ((show . take 10) . toFlatRaw) list
 
 createSnapshot :: IO HealthSnapshot
 createSnapshot = liftM mkSnapshot $ mkNestedBools 100

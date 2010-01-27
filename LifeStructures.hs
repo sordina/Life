@@ -19,12 +19,12 @@ data LifeCell a = LifeCell {
 -- Instances
 
 instance Functor LifeSnapshot
-  where fmap f = fromNestedRaw . map (map f) . toNestedRaw
+  where fmap f = fromRows . map (map f) . toRowsRaw
 
 -- Special instance for neighbour useage
 
 fmap' :: (LifeCell a -> a) -> LifeSnapshot a -> LifeSnapshot a
-fmap' f = fromNestedRaw . map (map f) . toNested
+fmap' f = fromRows . map (map f) . toRows
 
 -- Constructors
 
@@ -32,25 +32,24 @@ mkCell :: [[a]] -> (Integer, Integer) -> (Integer, Integer) -> LifeCell a
 mkCell matrix (x, y) (mx, my) = LifeCell {
     state = nestedAt x y matrix,
     neighbours = do
-      y' <- [x - 1 .. x + 1]
-      x' <- [y - 1 .. y + 1]
+      y' <- [y - 1 .. y + 1]
+      x' <- [x - 1 .. x + 1]
       return $ mkMaybe x' y'
   }
   where
-    n = Nothing
     mkMaybe x' y'
-      | x <= 0             = n
-      | y <= 0             = n
-      | x >= mx            = n
-      | y >= my            = n
-      | x' == x && y' == y = n -- The self cell isn't a neighbour
+      | x' <= 0            = Nothing
+      | y' <= 0            = Nothing
+      | x' >= mx           = Nothing
+      | y' >= my           = Nothing
+      | x' == x && y' == y = Nothing -- The self cell isn't a neighbour
       | otherwise          = Just $ mkCell matrix (x', y') (mx, my)
 
-fromNestedRaw :: [[a]] -> LifeSnapshot a
-fromNestedRaw cells = fromNestedInner (fromIntegral $ length $ head cells) cells
+fromRows :: [[a]] -> LifeSnapshot a
+fromRows rows = fromRowsInner (fromIntegral $ length $ head rows) rows
 
-fromNestedInner :: Integer -> [[a]] -> LifeSnapshot a
-fromNestedInner width cells = LifeSnapshot {
+fromRowsInner :: Integer -> [[a]] -> LifeSnapshot a
+fromRowsInner width cells = LifeSnapshot {
     startCell = sCell,
     nestedRaw = cells,
     nested = (map rightList . downList) sCell
@@ -61,26 +60,26 @@ fromNestedInner width cells = LifeSnapshot {
     sCell = mkCell cells (0, 0) (mx, my)
 
 fromFlat :: Integer -> [a] -> LifeSnapshot a
-fromFlat width = fromNestedInner width . splitLen width
+fromFlat width = fromRowsInner width . splitLen width
 
 -- Destructors
 
-toNested :: LifeSnapshot a -> [[LifeCell a]]
-toNested = nested
+toRows :: LifeSnapshot a -> [[LifeCell a]]
+toRows = nested
 
-toNestedRaw :: LifeSnapshot a -> [[a]]
-toNestedRaw = nestedRaw
+toRowsRaw :: LifeSnapshot a -> [[a]]
+toRowsRaw = nestedRaw
 
 toFlat :: LifeSnapshot a -> [LifeCell a]
-toFlat = concat . toNested
+toFlat = concat . toRows
 
 toFlatRaw :: LifeSnapshot a -> [a]
-toFlatRaw = concat . toNestedRaw
+toFlatRaw = concat . toRowsRaw
 
 toFlatWithPositions :: LifeSnapshot a -> [(Integer, Integer, a)]
 toFlatWithPositions list = l'''
   where
-    l = toNestedRaw list
+    l = toRowsRaw list
     l' = map (zip n) l
     l'' = zip n l'
     l''' = concatMap (uncurry f) l''
@@ -115,3 +114,18 @@ catNeighbours = catMaybes . neighbours
 
 catNeighboursRaw :: LifeCell a -> [a]
 catNeighboursRaw = map state . catMaybes . neighbours
+
+-- Properties tests
+
+test_list = [
+    1,2,1,2,
+    1,1,2,2,
+    2,1,2,1,
+    2,2,1,1
+  ]
+
+test_life = fromFlat 4 test_list
+
+test_life' = (map state . toFlat) test_life
+
+prop_cells = test_list == test_life'

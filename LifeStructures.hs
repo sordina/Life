@@ -2,13 +2,13 @@ module LifeStructures where
 
 import ListUtils (splitLen, nestedAt)
 import Data.Maybe (catMaybes)
+import Test.QuickCheck.Gen
 
 -- Data structures
 
 data LifeSnapshot a = LifeSnapshot {
     startCell :: LifeCell a,
-    nested :: [[LifeCell a]],
-    nestedRaw :: [[a]]
+    nested :: [[LifeCell a]]
   } deriving (Show, Eq)
 
 data LifeCell a = LifeCell {
@@ -51,7 +51,6 @@ fromRows rows = fromRowsInner (fromIntegral $ length $ head rows) rows
 fromRowsInner :: Integer -> [[a]] -> LifeSnapshot a
 fromRowsInner width cells = LifeSnapshot {
     startCell = sCell,
-    nestedRaw = cells,
     nested = (map rightList . downList) sCell
   }
   where
@@ -68,7 +67,7 @@ toRows :: LifeSnapshot a -> [[LifeCell a]]
 toRows = nested
 
 toRowsRaw :: LifeSnapshot a -> [[a]]
-toRowsRaw = nestedRaw
+toRowsRaw = map (map state) . toRows
 
 toFlat :: LifeSnapshot a -> [LifeCell a]
 toFlat = concat . toRows
@@ -117,15 +116,15 @@ catNeighboursRaw = map state . catMaybes . neighbours
 
 -- Properties tests
 
-test_list = [
+testList = [
     1,2,1,2,
     1,1,2,2,
     2,1,2,1,
     2,2,1,1
   ]
 
-test_life = fromFlat 4 test_list
+testLife = fromFlat 4 testList
 
-test_life' = (map state . toFlat) test_life
+testLife' = (map state . toFlat) testLife
 
-prop_cells = test_list == test_life'
+prop_cells = testList == testLife'

@@ -9,8 +9,7 @@ import LifeMatrix
 type Point = (Integer, Integer)
 
 renderSnapshot :: LifeSnapshot -> IO ()
-renderSnapshot snapshot = do
-  renderPrimitive Quads $ mapM_ renderPoint pointsHealth
+renderSnapshot snapshot = renderPrimitive Quads $ mapM_ renderPoint pointsHealth
   where
     pointsHealth = toListWithPos snapshot
 

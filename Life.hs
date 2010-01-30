@@ -2,7 +2,7 @@
 import Graphics.UI.GLUT
 import Data.IORef
 import Data.Time.Clock.POSIX
-import Control.Monad (when)
+--import Control.Monad (when)
 
 -- Internal imports
 import LifeMatrix
@@ -15,7 +15,7 @@ main = do
 
   lifeList <- randomGame 50
   lifeListIO <- newIORef lifeList
-  timeIO <- newIORef =<< getPOSIXTime
+  timeIO <- newIORef (0::POSIXTime) -- Epoch
 
   window "LIFE" 200 200 (display lifeListIO timeIO)
 
@@ -27,7 +27,7 @@ window title width height displayCB = do
   displayCallback $= displayCB
   keyboardMouseCallback $= Just (mkKM displayCB)
 
-  translate (Vector3 (0-1) (0-1) (0::GLfloat))
+  translate (Vector3 (negate 1) (negate 1) (0::GLfloat))
   scale 0.04 0.04 (0::GLfloat) -- Should tie this to the board size
 
 -- Pops off the head of the life-list and renders it at second intervals.

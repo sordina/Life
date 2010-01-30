@@ -22,7 +22,7 @@ type LifeSnapshot = ArrayMatrix Health
 data Health = Alive | Dead deriving (Eq, Show)
 
 randomGame :: (Integral i) => i -> IO [LifeSnapshot]
-randomGame size = liftM (iterate nextSnapshot) (randomSnapshot size)
+randomGame = liftM (iterate nextSnapshot) . randomSnapshot
 
 randomSnapshot :: Integral i => i -> IO LifeSnapshot
 randomSnapshot size = do
@@ -33,7 +33,7 @@ nextSnapshot :: LifeSnapshot -> LifeSnapshot
 nextSnapshot = neighbourMap nextCell
 
 nextCell :: Health -> [Health] -> Health
-nextCell cell neighbours = nextState cell (countHealth neighbours)
+nextCell cell = nextState cell . countHealth
 
 countHealth :: [Health] -> Integer
 countHealth = foldr f 0

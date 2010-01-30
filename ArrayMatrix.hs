@@ -23,4 +23,4 @@ instance Matrix ArrayMatrix a_
         cells   = cellsf m
         cellsf  = listArray (0, rows - 1) . map (listArray (0, columns - 1))
 
-    fromRows m = error $ "Invalid rowlist passed in."
+    fromRows m = error "Invalid rowlist passed in."

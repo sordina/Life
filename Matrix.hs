@@ -60,7 +60,7 @@ class Matrix m a
             | y >= rows m    = Nothing
             | otherwise      = Just $ at m x y
 
-    vicinityMatrix m x y = fromRows $ vicinityRows m x y
+    vicinityMatrix m x = fromRows . vicinityRows m x
 
     neighbours m x y = catMaybes $ outside $ toList $ vicinityMatrix m x y
       where

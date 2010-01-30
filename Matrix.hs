@@ -2,6 +2,8 @@ module Matrix (
     Matrix,
     fromRows,
     toList,
+    toListWithPos,
+    toRows,
     rows,
     columns,
     at,
@@ -15,6 +17,8 @@ class Matrix m a
   where
     fromRows       :: [[a]] -> m a
     toList         :: m a   -> [a]
+    toListWithPos  :: m a   -> [(Integer, Integer, a)]
+    toRows         :: m a   -> [[a]]
     rows           :: m a   -> Integer
     columns        :: m a   -> Integer
     row            :: m a   -> Integer -> [a]
@@ -29,6 +33,17 @@ class Matrix m a
       y <- [0 .. rows m - 1]
       x <- [0 .. columns m - 1]
       return $ at m x y
+
+    toListWithPos m = do
+      y <- [0 .. rows m - 1]
+      x <- [0 .. columns m - 1]
+      return (x, y, at m x y)
+
+    toRows m = do
+      y <- [0 .. rows m - 1]
+      return $ do
+        x <- [0 .. columns m - 1]
+        return $ at m x y
 
     row    m n = [at m x n | x <- [0 .. columns m - 1]]
     column m n = [at m n y | y <- [0 .. rows    m - 1]]

@@ -3,25 +3,24 @@ module LifeRendering where
 import Graphics.UI.GLUT
 import Control.Monad (mapM_)
 
-import LifeBool
 import Colors
-import LifeStructures (toFlatWithPositions)
+import LifeMatrix
 
 type Point = (Integer, Integer)
 
-renderSnapshot :: HealthSnapshot -> IO ()
+renderSnapshot :: LifeSnapshot -> IO ()
 renderSnapshot snapshot = do
-  color white
   renderPrimitive Quads $ mapM_ renderPoint pointsHealth
   where
-    pointsHealth = toFlatWithPositions snapshot
+    pointsHealth = toListWithPos snapshot
 
 renderPoint :: (Integer, Integer, Health) -> IO ()
-renderPoint (x, y, True) = point x y
-renderPoint _ = return ()
+renderPoint (x, y, Alive) = point x y white
+renderPoint (x, y, Dead)  = point x y black
 
-point :: Integer -> Integer -> IO ()
-point x y = do
+point :: Integer -> Integer -> Color3 GLfloat -> IO ()
+point x y inColor = do
+  color inColor
   v x  y  0
   v x  y' 0
   v x' y' 0

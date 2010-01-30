@@ -11,14 +11,12 @@
 
 import Graphics.UI.GLUT
 import Data.IORef
-import Random
 import Control.Monad
 
 -- Internal imports
 
-import LifeBool
+import LifeMatrix
 import LifeRendering
-import LifeStructures
 
 main :: IO ()
 main = do

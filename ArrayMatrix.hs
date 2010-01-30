@@ -1,4 +1,4 @@
-module ArrayMatrix (ArrayMatrix, fromRows)
+module ArrayMatrix (ArrayMatrix, fromRows, neighbourMap)
   where
 
 import Matrix

@@ -11,18 +11,23 @@ import LifeRendering
 
 main :: IO ()
 main = do
-  _ <- getArgsAndInitialize
-  initialDisplayMode $= [DoubleBuffered]
+  (program, args) <- getArgsAndInitialize
 
-  lifeList <- randomGame 50
+  gameSize <- return $ if length args == 1
+                        then (read :: String -> Integer) $ head args
+                        else 50
+
+  initialDisplayMode $= [DoubleBuffered]
+  lifeList <- randomGame gameSize
   lifeListIO <- newIORef lifeList
   timeIO <- newIORef (0::POSIXTime) -- Epoch
 
-  window "LIFE" (display lifeListIO timeIO)
+  window "LIFE" gameSize (display lifeListIO timeIO)
 
   mainLoop
 
-window title displayCB = do
+window :: String -> Integer -> IO () -> IO ()
+window title gameSize displayCB = do
   createWindow title
   smallSize <- get windowSize
 
@@ -30,8 +35,8 @@ window title displayCB = do
   keyboardMouseCallback $= Just (mkKM smallSize displayCB)
 
   translate (Vector3 (negate 1) (negate 1) (0::GLfloat))
-  scale 0.04 0.04 (0::GLfloat) -- Should tie this to the board size
-  --fullScreen
+  scale s s (0::GLfloat) -- Should tie this to the board size
+  where s = 2 / fromIntegral gameSize
 
 -- Pops off the head of the life-list and renders it at second intervals.
 display :: IORef [LifeSnapshot] -> IORef POSIXTime -> IO ()

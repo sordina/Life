@@ -44,10 +44,10 @@ nextState Dead neighbours
 
 instance Show LifeSnapshot
   where
-    show l = unlines (map (show . map f) (toRows l))
+    show l = unlines (map (map f) (toRows l))
       where
-        f Alive = "x"
-        f Dead  = " "
+        f Alive = 'x'
+        f Dead  = ' '
 
 -- This probably doesn't work as I have no idea what I'm doing... But it typechecks ^___^
 instance Read LifeSnapshot

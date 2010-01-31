@@ -1,8 +1,10 @@
-module ArrayMatrix (ArrayMatrix, fromRows, toRows, toListWithPos, neighbourMap)
+{-# OPTIONS -XMultiParamTypeClasses -XFlexibleInstances #-}
+module ArrayMatrix (ArrayMatrix, fromRows, toRows, toListWithPos, neighbours, neighbourMap)
   where
 
 import Matrix
 import Array
+import Control.Monad (guard)
 
 data ArrayMatrix a = ArrayMatrix {
     rows'    :: Integer,
@@ -12,7 +14,7 @@ data ArrayMatrix a = ArrayMatrix {
 
 instance Matrix ArrayMatrix a_
   where
-    at m x y = (cells m ! y) ! x
+    at (ArrayMatrix _ _ cells) x y = cells ! y ! x
     rows     = rows'
     columns  = columns'
 
@@ -23,4 +25,14 @@ instance Matrix ArrayMatrix a_
         cells   = cellsf m
         cellsf  = listArray (0, rows - 1) . map (listArray (0, columns - 1))
 
-    fromRows m = error "Invalid rowlist passed in."
+    fromRows _ = error "Invalid rowlist passed in."
+
+    -- Include some optimizations for builtins
+
+    -- We should be able to bypass 3 levels of abstraction
+    -- with an efficient implementation of neighbours here.
+    neighbours (ArrayMatrix rows columns cells) x y = do
+      y' <- [max 0 (y-1) .. min (columns-1) (y+1)]
+      x' <- [max 0 (x-1) .. min (rows-1)    (x+1)]
+      guard $ (x' /= x) || (y' /= y)
+      return $ cells ! y' ! x'

@@ -1,3 +1,5 @@
+{-# OPTIONS -XMultiParamTypeClasses -XFlexibleContexts #-}
+
 module Matrix (
     Matrix,
     fromRows,
@@ -15,15 +17,18 @@ import Data.Maybe (catMaybes)
 
 class Matrix m a
   where
+    -- required
     fromRows       :: [[a]] -> m a
+    rows           :: m a   -> Integer
+    columns        :: m a   -> Integer
+    at             :: m a   -> Integer -> Integer -> a
+
+    -- defaults
     toList         :: m a   -> [a]
     toListWithPos  :: m a   -> [(Integer, Integer, a)]
     toRows         :: m a   -> [[a]]
-    rows           :: m a   -> Integer
-    columns        :: m a   -> Integer
     row            :: m a   -> Integer -> [a]
     column         :: m a   -> Integer -> [a]
-    at             :: m a   -> Integer -> Integer -> a
     vicinityRows   :: m a   -> Integer -> Integer -> [[Maybe a]]
     vicinityMatrix :: Matrix m (Maybe a) => m a -> Integer -> Integer -> m (Maybe a)
     neighbours     :: Matrix m (Maybe a) => m a -> Integer -> Integer -> [a]

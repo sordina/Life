@@ -1,6 +1,7 @@
 *.swp
 *.hi
 *.o
+*.prof
 hugsin
 test.txt
 Life

@@ -44,7 +44,7 @@ window title gameSize displayCB = do
 display :: IORef [LifeSnapshot] -> IORef POSIXTime -> IO ()
 display lifeList timeIO = do
   previousTime <- get timeIO
-  currentTime <- getPOSIXTime
+  --currentTime <- getPOSIXTime
 
   -- leave this until we get propper rendering going
   -- when (currentTime > (previousTime + 1)) $ do

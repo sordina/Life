@@ -2,7 +2,6 @@ module RandomList (randomListValue, randomList, randomListN, randomRows, randomR
 
 import Random
 import ListUtils
-import Test.QuickCheck (Property, (==>))
 
 randomListValue :: RandomGen g => g -> [a] -> (g,a)
 randomListValue gen list = (g,val)
@@ -28,12 +27,3 @@ randomRows gen list width = splitLen (fromIntegral width) l
 
 randomRowsN :: (RandomGen g, Integral i) => g -> [a] -> i -> i -> [[a]]
 randomRowsN gen list width len = take (fromIntegral len) (randomRows gen list (fromIntegral width))
-
--- Properties tests
-
--- Tests that a random selection from a list is an element of that list.
-prop_elem :: [Integer] -> Property
-prop_elem list = not (null list) ==> result `elem` list
-  where
-    gen = mkStdGen 8008135
-    (g, result) = randomListValue gen list

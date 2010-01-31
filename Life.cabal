@@ -1,39 +1,33 @@
 Name: Life
 Version: 0.0.0
-
-Cabal-Version: >= 1.6
-Build-type: Simple
-
-License: Beer-Ware
-License-file: LICENSE
-
-Copyright: (c) Lyndon Maydwell <maydwell@gmail.com>
-
-Author: Lyndon Maydwell <maydwell@gmail.com>
-Maintainer: Lyndon Maydwell <maydwell@gmail.com>
-
-Homepage: http://github.com/sordina/Life
-
 Category:	Game
-
-Synopsis:	Conway's Game of Life written in Haskell-OpenGL
-
 Description:
   Conway's Game of Life is a cellular automatom simulation.
   This implementation uses OpenGL as a visualization layer.
 
-library
-  Build-depends:
-    safe, glut
-  Exposed-Modules:
-    Life
-  GHC-options:
-    -fglasgow-exts
+Author: Lyndon Maydwell <maydwell@gmail.com>
+Maintainer: Lyndon Maydwell <maydwell@gmail.com>
+Homepage: http://github.com/sordina/Life
 
-executable life
-    build-depends:
-        safe, glut
+License: OtherLicense
+License-file: LICENSE
 
-    ghc-options: -fglasgow-exts
+Build-type: Simple
+Cabal-Version: >= 1.6
 
-    main-is: Life.hs
+Executable life
+
+    Main-is: Life.hs
+
+    hs-source-dirs: src
+
+    Build-depends:
+      base >= 3.0,
+      haskell98,
+      QuickCheck >= 2.0,
+      OpenGL >= 2.0,
+      time >= 1.0,
+      safe,
+      GLUT
+
+    ghc-options: -O2 -fglasgow-exts -funbox-strict-fields

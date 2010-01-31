@@ -66,7 +66,5 @@ fullscreen smallSize = do
   currentSize <- get windowSize
   screenSize <- get screenSize
   if currentSize == screenSize
-   then
-     windowSize $= smallSize
-   else
-     fullScreen
+    then cursor $= LeftArrow >> windowSize $= smallSize
+    else cursor $= None      >> fullScreen

@@ -9,3 +9,6 @@
 
 Implementing Conway's classic game of life in haskell using the Opengl and GLUT libraries.
 
+Core logic is performed by the successor function:
+
+> game = iterate successor initial_frame

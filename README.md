@@ -1,5 +1,4 @@
-# Conway's Game of Life _in Haskell_
-(http://en.wikipedia.org/wiki/Conway's_Game_of_Life)
+# Conway's [Game of Life](http://en.wikipedia.org/wiki/Conway's_Game_of_Life) _in Haskell_
 
 * Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
 * Any live cell with more than three live neighbours dies, as if by overcrowding.

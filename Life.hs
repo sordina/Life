@@ -8,14 +8,12 @@ import System.Exit
 -- Internal imports
 import LifeMatrix
 import LifeRendering
+import Safe (readMay)
+import Data.Maybe (fromMaybe)
 
 main :: IO ()
 main = do
-  (program, args) <- getArgsAndInitialize
-
-  gameSize <- return $ if length args == 1
-                        then (read :: String -> Integer) $ head args
-                        else 50
+  gameSize <- (return . getSize . snd) =<< getArgsAndInitialize
 
   initialDisplayMode $= [DoubleBuffered]
   lifeList <- randomGame gameSize
@@ -25,6 +23,10 @@ main = do
   window "LIFE" gameSize (display lifeListIO timeIO)
 
   mainLoop
+
+getSize :: [String] -> Integer
+getSize [size] = fromMaybe 50 $ readMay size
+getSize _ = 50
 
 window :: String -> Integer -> IO () -> IO ()
 window title gameSize displayCB = do

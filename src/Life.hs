@@ -67,6 +67,9 @@ mkKM smallSize displayCB = km
     km (Char 'j') Down _ _ = displayCB
     km (Char 'f') Down _ _ = fullscreen smallSize
     km (Char 'q') Down _ _ = exitWith ExitSuccess
+    -- TODO: Make g a toggle
+    km (Char 'g') Down _ _ = idleCallback $= Just displayCB
+    km (Char 's') Down _ _ = idleCallback $= Nothing
     km _ _ _ _ = return ()
 
 fullscreen smallSize = do

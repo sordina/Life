@@ -2,14 +2,15 @@
 import Graphics.UI.GLUT
 import Data.IORef
 import Data.Time.Clock.POSIX
+import Data.Maybe (fromMaybe)
+import Safe (readDef)
 import System.Exit
 --import Control.Monad (when)
 
 -- Internal imports
 import LifeMatrix
 import LifeRendering
-import Safe (readMay)
-import Data.Maybe (fromMaybe)
+import Toggle
 
 main :: IO ()
 main = do
@@ -25,7 +26,7 @@ main = do
   mainLoop
 
 getSize :: [String] -> Integer
-getSize [size] = fromMaybe 50 $ readMay size
+getSize [size] = readDef 50 size
 getSize _ = 50
 
 window :: String -> Integer -> IO () -> IO ()
@@ -33,8 +34,11 @@ window title gameSize displayCB = do
   createWindow title
   smallSize <- get windowSize
 
+  -- Toggles betweenrequiring keyboard input and automatically running.
+  auto <- toggle (idleCallback $= Just displayCB) (idleCallback $= Nothing)
+
   displayCallback $= displayCB
-  keyboardMouseCallback $= Just (mkKM smallSize displayCB)
+  keyboardMouseCallback $= Just (mkKM smallSize displayCB auto)
 
   translate (Vector3 (negate 1) (negate 1) (0::GLfloat))
   scale s s (0::GLfloat) -- Should tie this to the board size
@@ -60,16 +64,14 @@ display lifeList timeIO = do
     flush
     swapBuffers
 
-mkKM smallSize displayCB = km
+mkKM smallSize displayCB auto = km
   where
     km :: Key -> KeyState -> c -> d -> IO ()
     km (Char 'n') Down _ _ = displayCB
     km (Char 'j') Down _ _ = displayCB
     km (Char 'f') Down _ _ = fullscreen smallSize
     km (Char 'q') Down _ _ = exitWith ExitSuccess
-    -- TODO: Make g a toggle
-    km (Char 'g') Down _ _ = idleCallback $= Just displayCB
-    km (Char 's') Down _ _ = idleCallback $= Nothing
+    km (Char 'g') Down _ _ = auto
     km _ _ _ _ = return ()
 
 fullscreen smallSize = do

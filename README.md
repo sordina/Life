@@ -13,8 +13,6 @@ Core logic is performed by the successor function:
 
 > game = iterate successor initial_frame
 
-***
-
 ## To-do:
 
 * Serialize and de-serialize state

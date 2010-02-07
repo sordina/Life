@@ -15,7 +15,7 @@ randomList gen list = map snd l
   where
     l = iterate f i
     i = randomListValue gen list
-    f (g, val) = randomListValue g list
+    f (g, _) = randomListValue g list
 
 randomListN :: (RandomGen g, Integral i) => g -> [a] -> i -> [a]
 randomListN gen list len = take (fromIntegral len) (randomList gen list)

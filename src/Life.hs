@@ -1,11 +1,9 @@
 -- External imports
+-- import Data.Time.Clock.POSIX
 import Graphics.UI.GLUT
 import Data.IORef
-import Data.Time.Clock.POSIX
-import Data.Maybe (fromMaybe)
 import Safe (readDef)
 import System.Exit
---import Control.Monad (when)
 
 -- Internal imports
 import LifeMatrix
@@ -19,9 +17,8 @@ main = do
   initialDisplayMode $= [DoubleBuffered]
   lifeList <- randomGame gameSize
   lifeListIO <- newIORef lifeList
-  timeIO <- newIORef (0::POSIXTime) -- Epoch
 
-  window "LIFE" gameSize (display lifeListIO timeIO)
+  window "LIFE" gameSize (display lifeListIO)
 
   mainLoop
 
@@ -45,24 +42,14 @@ window title gameSize displayCB = do
   where s = 2 / fromIntegral gameSize
 
 -- Pops off the head of the life-list and renders it at second intervals.
-display :: IORef [LifeSnapshot] -> IORef POSIXTime -> IO ()
-display lifeList timeIO = do
-  previousTime <- get timeIO
-  --currentTime <- getPOSIXTime
-
-  -- leave this until we get propper rendering going
-  -- when (currentTime > (previousTime + 1)) $ do
-  do
-    timeIO $= (previousTime + 1)
-
-    clear [ColorBuffer]
-    snap:snaps <- get lifeList
-    --putStrLn $ show snap
-    lifeList $= snaps
-    renderSnapshot snap
-    --renderBounds
-    flush
-    swapBuffers
+display :: IORef [LifeSnapshot] -> IO ()
+display lifeList = do
+  clear [ColorBuffer]
+  snap:snaps <- get lifeList
+  lifeList $= snaps
+  renderSnapshot snap
+  flush
+  swapBuffers
 
 mkKM smallSize displayCB auto = km
   where
@@ -72,6 +59,7 @@ mkKM smallSize displayCB auto = km
     km (Char 'f') Down _ _ = fullscreen smallSize
     km (Char 'q') Down _ _ = exitWith ExitSuccess
     km (Char 'g') Down _ _ = auto
+    -- km (Char 's') Down _ _ = save
     km _ _ _ _ = return ()
 
 fullscreen smallSize = do

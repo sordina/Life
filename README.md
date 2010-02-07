@@ -21,8 +21,10 @@ Core logic is performed by the successor function:
 * Change cell-state with mouse
 * 3D version
 * 3D camera options
-* Colour
 * Fuzzy logic
+* Colour (fuzzy-determined, inheritance determined)
 * Optimization
 * Package as a screen-saver
 * Allow inversions
+* Portal edges
+* Parallelization

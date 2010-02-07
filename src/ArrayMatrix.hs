@@ -27,8 +27,6 @@ instance Matrix ArrayMatrix a_
 
     fromRows _ = error "Invalid rowlist passed in."
 
-    -- Include some optimizations for builtins
-
     -- We should be able to bypass 3 levels of abstraction
     -- with an efficient implementation of neighbours here.
     neighbours (ArrayMatrix rows columns cells) x y = do

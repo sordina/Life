@@ -4,7 +4,8 @@ module LifeMatrix (randomGame, LifeSnapshot, Health (Alive, Dead), toListWithPos
 import Control.Monad
 
 -- Imports
-import ArrayMatrix
+import qualified ArrayMatrix
+import ArrayMatrix2
 import RandomList
 import Random
 
@@ -58,4 +59,4 @@ instance Read LifeSnapshot
         rows = map (map f) l
         l = lines str
         f 'x' = Alive
-        f ' ' = Dead
+        f _   = Dead

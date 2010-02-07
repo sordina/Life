@@ -1,6 +1,6 @@
 Name: Life
 Version: 0.0.0
-Category:	Game
+Category: Game
 Description:
   Conway's Game of Life is a cellular automatom simulation.
   This implementation uses OpenGL as a visualization layer.
@@ -29,6 +29,8 @@ Executable life
       OpenGL >= 2.0,
       time >= 1.0,
       safe,
+      category-extras,
+      array,
       GLUT
 
     ghc-options: -O2 -fglasgow-exts -funbox-strict-fields

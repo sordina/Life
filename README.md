@@ -25,3 +25,4 @@ Core logic is performed by the successor function:
 * Fuzzy logic
 * Optimization
 * Package as a screen-saver
+* Allow inversions

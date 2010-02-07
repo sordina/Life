@@ -1,4 +1,4 @@
-{-# OPTIONS -XMultiParamTypeClasses -XFlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module ArrayMatrix (ArrayMatrix, fromRows, toRows, toListWithPos, neighbours, neighbourMap)
   where
 

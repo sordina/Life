@@ -23,6 +23,7 @@ Executable life
 
     Build-depends:
       base >= 3.0,
+      StateVar >= 1.0,
       haskell98,
       QuickCheck >= 2.0,
       OpenGL >= 2.0,

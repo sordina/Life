@@ -1,4 +1,4 @@
-{-# OPTIONS -XMultiParamTypeClasses -XFlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleContexts #-}
 
 module Matrix (
     Matrix,

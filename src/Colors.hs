@@ -8,7 +8,9 @@ module Colors (
 		violet,
 		teal,
 		white,
-    black
+    black,
+
+    (|-|)
 	) where
 
 import Graphics.Rendering.OpenGL hiding (Color)
@@ -21,6 +23,17 @@ violet = c 0 1 1
 teal   = c 1 0 1
 white  = c 1 1 1
 black  = c 0 0 0
+
+(|-|) :: Color -> Color -> Color
+Color3 a b c |-| Color3 d e f = Color3 (a +- d) (b +- e) (c +- f)
+  where
+    a +- b = fromIntegral $ (a' + b') `mod` 2
+        where
+          a' :: Integer = oz a
+          b' :: Integer = oz b
+          oz n
+            | n > 0.5   = 1
+            | otherwise = 0
 
 type Color = Color3 GLfloat
 

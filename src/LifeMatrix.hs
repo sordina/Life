@@ -4,7 +4,6 @@ module LifeMatrix (randomGame, LifeSnapshot, Health (Alive, Dead), toListWithPos
 import Control.Monad
 
 -- Imports
--- import qualified ArrayMatrix
 import ArrayMatrix2
 import ListUtils
 import RandomList
@@ -32,12 +31,8 @@ randomSnapshot size = do
     zipper False _     = Dead
     zipper True  color = Alive color
 
-
 nextSnapshot :: LifeSnapshot -> LifeSnapshot
-nextSnapshot = neighbourMap nextCell
-
-nextCell :: Health -> [Health] -> Health
-nextCell cell = nextState cell . countHealth
+nextSnapshot = neighbourMap nextState
 
 countHealth :: [Health] -> Integer
 countHealth = foldr f 0
@@ -45,15 +40,19 @@ countHealth = foldr f 0
     f (Alive _) n = n + 1
     f Dead n = n
 
-nextState :: Health -> Integer -> Health
+colors []                 = []
+colors (Alive color : xs) = color : colors xs
+colors (Dead        : xs) =         colors xs
+
+nextState :: Health -> [Health] -> Health
 nextState (Alive color) neighbours
-  | neighbours < 2 = Dead
-  | neighbours > 3 = Dead
-  | otherwise      = Alive color
+  | num < 2 || num > 3 = Dead
+  | otherwise          = Alive $ foldl1 (|-|) (color : colors neighbours)
+  where num = countHealth neighbours
 
 nextState Dead neighbours
-  | neighbours == 3 = Alive white
-  | otherwise       = Dead
+  | countHealth neighbours == 3 = Alive white
+  | otherwise                   = Dead
 
 instance Show LifeSnapshot
   where

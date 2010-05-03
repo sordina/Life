@@ -14,7 +14,7 @@ renderSnapshot snapshot = renderPrimitive Quads $ mapM_ renderPoint pointsHealth
     pointsHealth = toListWithPos snapshot
 
 renderPoint :: (Integer, Integer, Health) -> IO ()
-renderPoint (x, y, Alive) = point x y white
+renderPoint (x, y, Alive color) = point x y color
 renderPoint _ = return () -- Do nothing for dead cells
 
 point :: Integer -> Integer -> Color3 GLfloat -> IO ()

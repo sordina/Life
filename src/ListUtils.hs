@@ -15,3 +15,6 @@ nestedAt outside inside = (!! i) . (!! o)
   where
     i = fromInteger inside
     o = fromInteger outside
+
+zipWithRows2 :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]
+zipWithRows2 = zipWith . zipWith

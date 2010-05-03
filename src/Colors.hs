@@ -1,4 +1,6 @@
 module Colors (
+    Color,
+    non_black,
 		red,
 		green,
 		blue,
@@ -9,7 +11,7 @@ module Colors (
     black
 	) where
 
-import Graphics.Rendering.OpenGL
+import Graphics.Rendering.OpenGL hiding (Color)
 
 red    = c 1 0 0
 green  = c 0 1 0
@@ -20,6 +22,18 @@ teal   = c 1 0 1
 white  = c 1 1 1
 black  = c 0 0 0
 
-c :: Int -> Int -> Int -> Color3 GLfloat
+type Color = Color3 GLfloat
+
+non_black = [
+    red,
+    green,
+    blue,
+    yellow,
+    violet,
+    teal,
+    white
+  ]
+
+c :: Int -> Int -> Int -> Color
 c r g b = Color3 (f r) (f g) (f b)
 	where f = fromIntegral

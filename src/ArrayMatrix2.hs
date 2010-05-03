@@ -21,7 +21,7 @@ instance Matrix ArrayMatrix a
             cols = fromIntegral . length $ head lst
 
             mkNumAssoc lst = [((c, r), e) | (r , row) <- zip [0..] lst,
-                                            (c, e) <- zip [0..] row]
+                                            (c,    e) <- zip [0..] row]
 
     neighbourMap f arr = P.array (P.Pointer (0,0) arr P.=>> upd)
       where

@@ -17,7 +17,7 @@ Cabal-Version: >= 1.6
 
 Executable life
 
-    Main-is: Life.hs
+    Main-is: Main.hs
 
     hs-source-dirs: src
 

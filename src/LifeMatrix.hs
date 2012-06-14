@@ -1,10 +1,12 @@
+{-# LANGUAGE TypeSynonymInstances #-}
+
 module LifeMatrix (randomGame, LifeSnapshot, Health (Alive, Dead), toListWithPos) where
 
 -- Libraries
 import Control.Monad
 
 -- Imports
-import ArrayMatrix2
+import ArrayMatrix
 import ListUtils
 import RandomList
 import Random
@@ -26,8 +28,8 @@ randomSnapshot size = do
   return $ fromRows $ splitLen s lifes
 
   where
-    s  :: Integer = fromIntegral size
-    s2 :: Int = fromIntegral size ^ 2
+    s = fromIntegral size :: Integer
+    s2 = fromIntegral size ^ 2 :: Int
     zipper False _     = Dead
     zipper True  color = Alive color
 

@@ -6,7 +6,8 @@ import Matrix
 import Data.Array
 import Control.Monad (guard)
 
-import qualified Control.Comonad.Pointer as P
+import qualified Control.Comonad as C
+import qualified Control.Comonad.Store.Pointer as P
 
 type ArrayMatrix = Array (Integer, Integer)
 
@@ -23,7 +24,7 @@ instance Matrix ArrayMatrix a
             mkNumAssoc lst = [((c, r), e) | (r , row) <- zip [0..] lst,
                                             (c,    e) <- zip [0..] row]
 
-    neighbourMap f arr = P.array (P.Pointer (0,0) arr P.=>> upd)
+    neighbourMap f arr = P.array (P.Pointer (0,0) arr C.=>> upd)
       where
         maxx = fst . snd $ bounds arr
         maxy = snd . snd $ bounds arr

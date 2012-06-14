@@ -22,14 +22,15 @@ Executable life
     hs-source-dirs: src
 
     Build-depends:
-      base >= 3.0,
+      base >= 4.0,
       StateVar >= 1.0,
       haskell98,
       QuickCheck >= 2.0,
       OpenGL >= 2.0,
       time >= 1.0,
+      comonad-extras,
       safe,
-      category-extras,
+      comonad >= 1.0,
       array,
       GLUT
 

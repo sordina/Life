@@ -29,8 +29,8 @@ Color3 a b c |-| Color3 d e f = Color3 (a +- d) (b +- e) (c +- f)
   where
     a +- b = fromIntegral $ (a' + b') `mod` 2
         where
-          a' :: Integer = oz a
-          b' :: Integer = oz b
+          a' = oz a :: Integer
+          b' = oz b :: Integer
           oz n
             | n > 0.5   = 1
             | otherwise = 0
